@@ -18,9 +18,13 @@ UI, eccentric load view.
 
 ## Current state
 
-- Hosted database: Supabase project in Sydney. Migration `db/migrations/0001_people_and_access.sql` is applied.
+- Hosted database: Supabase project in Sydney. Migration `0001_people_and_access.sql` is applied. Migration
+  `0002_exercise_library.sql` is merged into the code, and the owner runs it in the Supabase SQL Editor. Ask the
+  owner whether it has been run before assuming the exercise pages work.
 - `.env.local` exists and is filled in. Do not touch it (see rule 1).
 - A coach login exists. The app runs locally at http://localhost:3000 and login works.
+- Built so far: sign in, client invites, exercise library (tags, swap lists, CSV import). Not built yet: programmes,
+  sessions, logging, training load, check-ins.
 
 ## Hard rules
 
@@ -31,15 +35,17 @@ UI, eccentric load view.
    commit in small steps with clear messages, push the branch, and open a pull request with a plain English summary
    of what changed and how the owner can test it.
 3. **Deleting and schema changes.** Ask the owner before deleting any file, table, user or data, and before
-   changing the database schema. Schema changes are new numbered migration files in `db/migrations/` (`0002`,
-   `0003` and so on), never edits to `0001` or any applied migration. Tell the owner when they need to run one in
+   changing the database schema. Schema changes are new numbered migration files in `db/migrations/` (the next number
+   after the last one, so `0003` now), never edits to an applied migration. Tell the owner when they need to run one in
    the Supabase SQL Editor, and give the exact steps.
 4. **Service role key.** Never put the service role key in client-side code. It is server only
    (`src/lib/supabase/admin.ts`, which imports `server-only`).
-5. **Tell first.** Before running any command that installs packages, changes git history or touches the database,
-   say what it does and why.
+5. **Passwords and secrets on websites.** Never type a password, key or token into any website, and never ask the
+   owner to paste one into chat. Browser checks are read-only: look, do not click delete, do not enter credentials.
 6. **Check your work.** After each change, run the dev server and the type check and lint, fix what breaks, and tell
    the owner what to click through in the browser to confirm it works.
+7. **Tell first.** Before running any command that installs packages, changes git history or touches the database,
+   say what it does and why.
 
 ## Tech stack
 
@@ -111,11 +117,28 @@ Clients are not created this way. The coach invites them from the Clients page i
 - Store prescribed and actual results in separate tables. Never overwrite what the coach prescribed.
 - Every owned row must trace back to a coach, so more coaches can be added later.
 
+## Working agreement
+
+Work on your own and keep the owner out of the loop, except at these checkpoints. At a checkpoint, stop and ask.
+
+- **A migration needs running.** Give the exact file name and say where to paste it (Supabase, SQL Editor, New
+  query, paste, Run). Say it is run once only.
+- **A new env var needs a real value.** Add the name to `.env.example` with an empty value and say which line to
+  fill in.
+- **Anything would be deleted, or existing data changed.** Files, tables, users, rows. Ask first.
+- **A decision about how the app should work.** Ask one question at a time and give a recommended default.
+
+Everything else, do without asking: branches, commits, pull requests, tests, lint, type check, fixing what breaks.
+
 ## How we work
 
 - One feature at a time. Finish and test it before starting the next.
 - A new branch for each feature, named for what it does (for example `feature/exercise-library`).
-- Small commits with clear messages. Open a pull request when the feature is ready.
-- The owner tests in the browser before merging. Do not merge pull requests yourself.
-- Do not start building until the owner has said which feature is next.
+- Small commits with clear messages. Open a pull request when the feature is ready, with a plain English summary
+  and how to test it.
+- Do not merge pull requests unless the owner asks for that in the same message. Never push to `main`.
+- Test it yourself first: run the type check, lint and tests, and start the app. Then tell the owner what to click
+  through in the browser. Cloud sessions have no browser tool and no Supabase login, so say clearly what was not
+  checked in a real browser.
+- Do not start building a new feature until the owner has approved the plan for it.
 - Flag anything that needs legal review (health information, privacy law, third-party terms) instead of guessing.
