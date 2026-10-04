@@ -1,10 +1,10 @@
 // One-off: creates the coach login and coach record.
-// Usage: npx tsx --env-file=.env.local scripts/create-coach.ts "Name" coach@example.com 'a-long-password'
+// Usage: npx tsx --env-file=.env.local scripts/create-coach.mts "Name" coach@example.com 'a-long-password'
 import { createClient } from '@supabase/supabase-js'
 
 const [name, email, password] = process.argv.slice(2)
 if (!name || !email || !password || password.length < 12) {
-  console.error('Usage: create-coach.ts "Name" email password (password at least 12 characters)')
+  console.error('Usage: create-coach.mts "Name" email password (password at least 12 characters)')
   process.exit(1)
 }
 const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
