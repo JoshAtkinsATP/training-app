@@ -60,16 +60,20 @@ need you to click or type something. Everything else is explained so you know wh
 
 ### 5. Build the database tables
 
-**You do this.** The tables are described in files inside the `db/migrations` folder. Run them in number order.
-Only `0001_people_and_access.sql` exists so far.
+**You do this.** The tables are described in files inside the `db/migrations` folder. Run them in number order,
+one at a time:
+
+1. `0001_people_and_access.sql` (people and privacy rules)
+2. `0002_exercise_library.sql` (exercises, tags and swap lists)
+
+For each file:
 
 1. In Supabase, click **SQL Editor** in the left menu, then **New query**.
-2. Open `db/migrations/0001_people_and_access.sql` on your computer, copy everything in it, and paste it into the
-   query box.
-3. Click **Run**. You should see "Success".
+2. Open the file on your computer, copy everything in it, and paste it into the query box.
+3. Click **Run**. You should see "Success. No rows returned".
 
 Never run the same migration twice, and never edit a migration that has already been run. Changes always go in a
-new numbered file.
+new numbered file. If you are not sure which ones you have already run, ask before running anything.
 
 ### 6. Fill in your secret settings
 
@@ -119,8 +123,36 @@ Open `http://localhost:3000` in your browser. Sign in with the coach email and p
 - Clients and coaches only ever see their own data (enforced by the database itself).
 - A draft privacy notice at `/privacy`. A lawyer must review it before real clients use the app.
 - Can be added to a phone home screen, with a plain "you are offline" page.
+- **Exercise library** (coach only): add, edit and archive exercises. Tag each by body region, movement pattern, joint
+  action and muscles (primary and secondary). Set the swap lists clients will be offered. Import a whole list from a
+  CSV file.
 
-Programmes, sessions, exercises, training load and check-ins are not built yet.
+Programmes, sessions, training load and check-ins are not built yet.
+
+## The exercise library
+
+Click **Exercises** in the coach menu.
+
+- **Add an exercise:** name, type, video link, coaching notes, then the tags. Joint actions and muscles are set with
+  drop-downs. Load will later be counted against every joint action you pick, in full. Primary muscles count in full
+  and secondary muscles count for half.
+- **Swap lists:** under each exercise, list the *similar* exercises (a like-for-like swap) and, if you want, a
+  different exercise for each body area (for an injury or niggle). Clients are only ever offered what you list here.
+  Type one exercise name per line, spelt exactly as it appears in your library.
+- **Archive:** exercises are never deleted, because past sessions will point at them. Archiving hides one from the
+  main list.
+- **Needs review:** imported exercises are marked "Needs review" until you tick "I have checked these tags".
+
+### Importing a list
+
+1. In your spreadsheet, click **File**, then **Download**, then **Comma-separated values (.csv)**.
+2. In the app, click **Exercises**, then **Import from a file**, choose the file and click **Read the file**.
+3. Look through the table. Rows that are not exercises, repeats, and names you already have are unticked. The app
+   proposes tags from the name. Rows it could not work out say so. Change anything in the table that is wrong.
+4. Click **Import**. Nothing is saved before this. If anything goes wrong, nothing at all is saved.
+
+Imported exercises can be refined one by one afterwards. Importing the same file again skips names you already have
+and never overwrites your edits.
 
 ## Checks (for when we change the code)
 
