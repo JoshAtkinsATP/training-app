@@ -3,5 +3,6 @@ import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
-  test: { include: ['db/tests/**/*.test.ts', 'src/**/*.test.ts'], fileParallelism: false },
+  esbuild: { jsx: 'automatic' },
+  test: { include: ['db/tests/**/*.test.ts', 'src/**/*.test.{ts,tsx}'], fileParallelism: false },
 })
