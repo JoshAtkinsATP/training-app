@@ -10,6 +10,7 @@ export default async function CoachLayout({ children }: { children: React.ReactN
         <nav className="flex gap-4 text-sm">
           <Link href="/coach" className="font-semibold">Coach</Link>
           <Link href="/coach/clients">Clients</Link>
+          <Link href="/coach/exercises">Exercises</Link>
         </nav>
         <form action={signOut} className="flex items-center gap-3 text-sm">
           <span>{me.name}</span>

@@ -85,8 +85,24 @@ Clients are not created this way. The coach invites them from the Clients page i
 - `src/lib/auth.ts`: works out who is signed in and their role from the database, never from the browser.
 - `src/lib/supabase/`: the three Supabase connections (`server.ts` as the signed-in user, `admin.ts` as the
   service role, `proxy.ts` for session refresh).
-- `db/migrations/`: numbered SQL files, applied by hand in the Supabase SQL Editor.
-- `db/tests/`: row level security tests.
+- `src/app/coach/exercises/`: exercise library pages (list, add, edit, import) and their server actions.
+- `src/lib/exercises/`: `taxonomy.ts` (fixed lists), `suggest.ts` (proposes tags from an exercise name),
+  `import.ts` (reads CSV, builds the review table, checks what the coach approves), `queries.ts` (reads).
+- `db/migrations/`: numbered SQL files, applied by hand in the Supabase SQL Editor. Applied so far: 0001, 0002
+  (once the owner has run it).
+- `db/tests/`: row level security tests and an import pipeline test.
+
+## Exercise library notes
+
+- Tag lists (regions, movement patterns, joints, joint actions, muscles) have built-in rows with `coach_id` null that
+  nobody signed in can change. A coach can add their own rows.
+- Exercises are archived, never deleted (no delete permission), because programmes and history will point at them.
+- Each exercise's tags use the actual exercise done, so a swapped exercise carries its own tags into load.
+- Load attribution: each tagged joint action gets the full load of a set. Muscles use weight 1.0 (primary) and 0.5
+  (secondary). Contraction type is stored on `exercise_joint_action` (only concentric is used for load for now).
+- Swap suggestions come only from `exercise_swap_option`. Never invent suggestions.
+- The importer is one database function, `public.import_exercises`, so an import is all or nothing.
+- If a rule in `suggest.ts` uses a tag slug, that slug must be seeded in a migration. A test checks this.
 
 ## Database rules to keep following
 
