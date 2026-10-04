@@ -86,10 +86,12 @@ Clients are not created this way. The coach invites them from the Clients page i
 - `src/lib/supabase/`: the three Supabase connections (`server.ts` as the signed-in user, `admin.ts` as the
   service role, `proxy.ts` for session refresh).
 - `src/app/coach/exercises/`: exercise library pages (list, add, edit, import) and their server actions.
+- `src/app/coach/clients/[id]/`: client profile page (testing numbers, 1RMs) and its server actions.
+- `src/lib/clients/`: `testing.ts` (speed conversion, high-speed threshold, form checks, latest 1RM), `queries.ts`.
 - `src/lib/exercises/`: `taxonomy.ts` (fixed lists), `suggest.ts` (proposes tags from an exercise name),
   `import.ts` (reads CSV, builds the review table, checks what the coach approves), `queries.ts` (reads).
-- `db/migrations/`: numbered SQL files, applied by hand in the Supabase SQL Editor. Applied so far: 0001, 0002
-  (once the owner has run it).
+- `db/migrations/`: numbered SQL files, applied by hand in the Supabase SQL Editor. Applied so far: 0001. Merged but run by
+  the owner: 0002, 0003 (ask which have been run).
 - `db/tests/`: row level security tests and an import pipeline test.
 
 ## Exercise library notes
@@ -103,6 +105,14 @@ Clients are not created this way. The coach invites them from the Clients page i
 - Swap suggestions come only from `exercise_swap_option`. Never invent suggestions.
 - The importer is one database function, `public.import_exercises`, so an import is all or nothing.
 - If a rule in `suggest.ts` uses a tag slug, that slug must be seeded in a migration. A test checks this.
+
+## Client profile notes
+
+- Testing numbers live on `client` (speeds in m/s, shown and typed in km/h). Every change is copied to
+  `client_testing_history` by a trigger, so later load calculations can use the numbers that applied at the time.
+- 1RMs are append-only rows in `client_exercise_max`. The latest by `measured_on` then `created_at` is the current
+  one. There is no edit or delete. Sources: entered, tested, estimated (estimated is for later).
+- High-speed running threshold = `hs_threshold_pct` of MAS or of max speed, per `hs_basis`.
 
 ## Database rules to keep following
 

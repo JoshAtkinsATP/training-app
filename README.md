@@ -65,6 +65,7 @@ one at a time:
 
 1. `0001_people_and_access.sql` (people and privacy rules)
 2. `0002_exercise_library.sql` (exercises, tags and swap lists)
+3. `0003_client_profiles.sql` (1RMs and the history of testing numbers)
 
 For each file:
 
@@ -127,7 +128,24 @@ Open `http://localhost:3000` in your browser. Sign in with the coach email and p
   action and muscles (primary and secondary). Set the swap lists clients will be offered. Import a whole list from a
   CSV file.
 
+- **Client profiles** (coach only): click a client's name on the Clients page. Enter testing numbers (max and resting
+  heart rate, MAS, max speed, lactate threshold heart rate and power) and set what counts as high-speed running, as
+  a percentage of MAS or max speed. Record 1RMs per exercise.
+
 Programmes, sessions, training load and check-ins are not built yet.
+
+## Client profiles
+
+Click **Clients**, then a client's name.
+
+- **Testing numbers:** speeds are typed in km/h, which is how MAS is usually quoted, and stored in metres per second.
+  Leave a box empty if you do not have the number. The page works out where high-speed running starts and shows it
+  under the form.
+- **History:** every change to the testing numbers is kept, so past training can later be judged against the numbers
+  that applied at the time.
+- **1RMs:** type an exercise name from your library, the weight and the date. The latest entry for an exercise is the
+  current 1RM, and percentage-based prescriptions will use it. To fix a mistake, add a new entry. Older entries stay
+  as history and cannot be edited or deleted.
 
 ## The exercise library
 
